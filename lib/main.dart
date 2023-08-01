@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         ),
         home: ProductOverviewScreen(),
         routes: {
-           ProductDetainScreen.routeName:(context) => ProductDetainScreen(),
+           ProductDetailScreen.routeName:(context) => ProductDetailScreen(),
         },
       ),
     );

@@ -39,6 +39,10 @@ class Products with ChangeNotifier {
   List<Product> get items {
     return [..._items];
   }
+  // to return products with specific id we define it here so that our code looks clean
+   Product findById(String id) {
+    return _items.firstWhere((prod) => prod.id == id);
+  }
   // we are adding data by this specific member func because we need to notify all the listners about the change
   void addProduct(){
     //_items.add(value);

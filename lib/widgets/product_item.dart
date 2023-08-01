@@ -49,7 +49,7 @@ class ProductItem extends StatelessWidget {
             //           )),
             //);
             // we are only sending id so that we canfetch all data wherever we want
-            Navigator.of(context).pushNamed(ProductDetainScreen.routeName ,arguments: id);
+            Navigator.of(context).pushNamed(ProductDetailScreen.routeName ,arguments: id);
           },
           child: Image.network(
             // to show the image of product
