@@ -36,16 +36,43 @@ class Products with ChangeNotifier {
     ),
   ];
    // here we are using getter so that our item file which is private its copy cn be accessed by somewhere else
+ 
   List<Product> get items {
+    // if (_showFavoritesOnly) {
+    //   return _items.where((prodItem) => prodItem.isFavorite).toList();
+    // }
     return [..._items];
   }
-  // to return products with specific id we define it here so that our code looks clean
-   Product findById(String id) {
+  
+  List<Product> get favoriteItems {
+    return _items.where((prodItem) => prodItem.isFavorite).toList();
+  }
+// to return products with specific id we define it here so that our code looks clean
+  Product findById(String id) {
     return _items.firstWhere((prod) => prod.id == id);
   }
+
+  // void showFavoritesOnly() {
+  //   _showFavoritesOnly = true;
+  //   notifyListeners();
+  // }
+
+  // void showAll() {
+  //   _showFavoritesOnly = false;
+  //   notifyListeners();
+  // }
   // we are adding data by this specific member func because we need to notify all the listners about the change
   void addProduct(){
     //_items.add(value);
    notifyListeners();
   }
 }
+
+
+
+
+
+
+  // var _showFavoritesOnly = false;
+
+

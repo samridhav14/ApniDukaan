@@ -4,14 +4,18 @@ import '../widgets/product_item.dart';
 import 'package:provider/provider.dart';
 
 class ProductsGrid extends StatelessWidget {
+    final bool showFavs;
+
+  ProductsGrid(this.showFavs);
   @override
   Widget build(BuildContext context) {
     final productsdata = Provider.of<Products>(context);
-    final products = productsdata.items;
+    final products = showFavs ? productsdata.favoriteItems : productsdata.items;
     return GridView.builder(
       padding: const EdgeInsets.all(10.0),
       itemCount: products.length,
       // we will pass id,title,image url to print our product and we will do it in a seprate widget for better code redability
+     // we will use .value approach if a object is already there and we reuse its value where as in create we will prefer for new obj 
       itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
        value: products[i],
         child: ProductItem(
