@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../providers/cart.dart';
 import 'package:shopapp/providers/products_provider.dart';
 import '../screens/product_detail_screen.dart';
 import '../providers/product.dart';
@@ -12,7 +13,9 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // we are setting listen to false because we do not want the whole thing to change
    final product = Provider.of<Product>(context, listen: false);
+   final cart = Provider.of<Cart>(context, listen: false);
     
     // here we use clipppreact so that we can use circular borders
     return ClipRRect(
@@ -41,7 +44,9 @@ class ProductItem extends StatelessWidget {
                 Icons.shopping_cart,
               ),
               color: Theme.of(context).colorScheme.secondary,
-              onPressed: () {},
+              onPressed: () {
+                cart.addItem(product.id, product.price, product.title);
+              },
             ),
           ),
           // as we know image is not directly tappeble we use gesture detector to do this
