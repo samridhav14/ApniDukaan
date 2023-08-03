@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-// we can also use as here 
+// we can also use as here
 import '../providers/cart.dart' show Cart;
 import '../widgets/cart_item.dart';
+import '../providers/orders.dart';
 
 class CartScreen extends StatelessWidget {
   // to go to cart screen we use routename
@@ -28,7 +29,7 @@ class CartScreen extends StatelessWidget {
                     'Total',
                     style: TextStyle(fontSize: 20),
                   ),
-                  Spacer(),// it take all the spaceit can take
+                  Spacer(), // it take all the spaceit can take
                   // similar to badge element with rounded corner
                   Chip(
                     label: Text(
@@ -46,14 +47,18 @@ class CartScreen extends StatelessWidget {
                   // )
                   // use text button because flat button is depriciated
                   TextButton(
-                    onPressed: () {},
-                   child: Text('ORDER NOW'),
-                   style: TextButton.styleFrom(
-                    textStyle: TextStyle(
+                    onPressed: () {
+                      //logic to add new prd
+                      Provider.of(context, listen: false).addOrder(
+                          cart.items.values.toList(), cart.totalAmount);
+                      cart.clear();
+                    },
+                    child: Text('ORDER NOW'),
+                    style: TextButton.styleFrom(
+                        textStyle: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
-                    )
-                   ),
-                   )
+                    )),
+                  )
                 ],
               ),
             ),
@@ -61,21 +66,18 @@ class CartScreen extends StatelessWidget {
           SizedBox(height: 10),
           Expanded(
             child: ListView.builder(
-              
-              itemCount: cart.items.length,
-              itemBuilder: (ctx, i){
-                  final key=cart.items.keys.elementAt(i);
-                return CartItem(
-              
-                // we have extacted value otherwise null error will be there
-                cart.items[key]!.id,
-                key,
-                cart.items[key]!.price,
-                cart.items[key]!.quantity,
-                cart.items[key]!.title,
-              );
-              }
-            ),
+                itemCount: cart.items.length,
+                itemBuilder: (ctx, i) {
+                  final key = cart.items.keys.elementAt(i);
+                  return CartItem(
+                    // we have extacted value otherwise null error will be there
+                    cart.items[key]!.id,
+                    key,
+                    cart.items[key]!.price,
+                    cart.items[key]!.quantity,
+                    cart.items[key]!.title,
+                  );
+                }),
           )
         ],
       ),
