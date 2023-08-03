@@ -33,7 +33,11 @@ void removeItem(String productId){
    _items.remove(productId);
    notifyListeners();
 }
-
+// if we place order
+void clear(){
+  _items={};
+  notifyListeners();
+}
 // to add a new ietem in cart
   void addItem(String productId, double price, String title) {
     // if it already exist increase the quantity count
