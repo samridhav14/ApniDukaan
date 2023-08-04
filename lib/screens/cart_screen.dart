@@ -49,7 +49,7 @@ class CartScreen extends StatelessWidget {
                   TextButton(
                     onPressed: () {
                       //logic to add new prd
-                      Provider.of(context, listen: false).addOrder(
+                      Provider.of<Orders>(context, listen: false).addOrder(
                           cart.items.values.toList(), cart.totalAmount);
                       cart.clear();
                     },
