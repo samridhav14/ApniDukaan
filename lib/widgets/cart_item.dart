@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -43,6 +45,24 @@ class CartItem extends StatelessWidget {
       ),
       // stops both side removal
       direction: DismissDirection.endToStart,
+      confirmDismiss: (direction){
+           return showDialog(context: context, builder: (ctx)=>
+              AlertDialog(
+                title: Text('Are you Sure?'),
+                content: Text('Do you want to remove the item from cart '),
+                actions: [
+                  TextButton(onPressed: () {
+                      // we dont want to dissmiss
+                      Navigator.of(context).pop();
+                    }, child: Text('NO'),),
+                  TextButton(onPressed: () { 
+                    // this will return true to delete
+                     Navigator.of(context).pop(true);
+                   }, child: Text('YES'),),
+                ],
+              )
+            );
+      },
       // logically removing products here we use direction because we can assign diff task to different direction
       onDismissed: (direction) {
         // listen is off because we dont use this if we add anything
