@@ -3,6 +3,7 @@ import 'package:shopapp/providers/cart.dart';
 import 'package:shopapp/providers/orders.dart';
 import 'package:shopapp/screens/cart_screen.dart';
 import 'package:shopapp/screens/orders_screen.dart';
+import 'package:shopapp/screens/users_products_screen.dart';
 import '../screens/product_view_screen.dart';
 import '../screens/product_detail_screen.dart';
 import './providers/products_provider.dart';
@@ -35,13 +36,14 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSwatch()
               .copyWith(primary: Colors.green, secondary: Colors.pink),
           fontFamily: 'Lato',
-          textTheme: TextTheme(titleLarge: TextStyle(color: Colors.white)),
+          textTheme: const TextTheme(titleLarge: TextStyle(color: Colors.white)),
         ),
-        home: ProductOverviewScreen(),
+        home: const ProductOverviewScreen(),
         routes: {
-          ProductDetailScreen.routeName: (context) => ProductDetailScreen(),
-          CartScreen.routeName: (context) => CartScreen(),
-          OrdersScreen.routeName:(context) => OrdersScreen()
+          ProductDetailScreen.routeName: (context) => const ProductDetailScreen(),
+          CartScreen.routeName: (context) => const CartScreen(),
+          OrdersScreen.routeName:(context) => const OrdersScreen(),
+          UserProductsScreen.routeName:(context) =>  UserProductsScreen(),
         },
       ),
     );

@@ -9,27 +9,29 @@ class CartScreen extends StatelessWidget {
   // to go to cart screen we use routename
   static const routeName = '/cart';
 
+  const CartScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your Cart'),
+        title: const Text('Your Cart'),
       ),
       body: Column(
         children: <Widget>[
           Card(
-            margin: EdgeInsets.all(15),
+            margin: const EdgeInsets.all(15),
             child: Padding(
-              padding: EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(
+                  const Text(
                     'Total',
                     style: TextStyle(fontSize: 20),
                   ),
-                  Spacer(), // it take all the spaceit can take
+                  const Spacer(), // it take all the spaceit can take
                   // similar to badge element with rounded corner
                   Chip(
                     label: Text(
@@ -53,17 +55,17 @@ class CartScreen extends StatelessWidget {
                           cart.items.values.toList(), cart.totalAmount);
                       cart.clear();
                     },
-                    child: Text('ORDER NOW'),
                     style: TextButton.styleFrom(
                         textStyle: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
                     )),
+                    child: const Text('ORDER NOW'),
                   )
                 ],
               ),
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Expanded(
             child: ListView.builder(
                 itemCount: cart.items.length,

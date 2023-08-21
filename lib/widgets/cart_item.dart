@@ -13,12 +13,12 @@ class CartItem extends StatelessWidget {
   final int quantity;
   final String title;
 
-  CartItem(
+  const CartItem(
     this.id,
     this.productId,
     this.price,
     this.quantity,
-    this.title,
+    this.title, 
   );
 
   @override
@@ -30,17 +30,17 @@ class CartItem extends StatelessWidget {
       // back groud colour to be shown whle deleting
       background: Container(
         color: Theme.of(context).colorScheme.error,
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 20),
+        margin: const EdgeInsets.symmetric(
+          horizontal: 15,
+          vertical: 4,
+        ),
         // this will help user how that things are deleting
-        child: Icon(
+        child: const Icon(
           Icons.delete,
           color: Colors.white,
           size: 40,
-        ),
-        alignment: Alignment.centerRight,
-        padding: EdgeInsets.only(right: 20),
-        margin: EdgeInsets.symmetric(
-          horizontal: 15,
-          vertical: 4,
         ),
       ),
       // stops both side removal
@@ -48,17 +48,17 @@ class CartItem extends StatelessWidget {
       confirmDismiss: (direction){
            return showDialog(context: context, builder: (ctx)=>
               AlertDialog(
-                title: Text('Are you Sure?'),
-                content: Text('Do you want to remove the item from cart '),
+                title: const Text('Are you Sure?'),
+                content: const Text('Do you want to remove the item from cart '),
                 actions: [
                   TextButton(onPressed: () {
                       // we dont want to dissmiss
                       Navigator.of(context).pop();
-                    }, child: Text('NO'),),
+                    }, child: const Text('NO'),),
                   TextButton(onPressed: () { 
                     // this will return true to delete
                      Navigator.of(context).pop(true);
-                   }, child: Text('YES'),),
+                   }, child: const Text('YES'),),
                 ],
               )
             );
@@ -69,16 +69,16 @@ class CartItem extends StatelessWidget {
         Provider.of<Cart>(context, listen: false).removeItem(productId);
       },
       child: Card(
-        margin: EdgeInsets.symmetric(
+        margin: const EdgeInsets.symmetric(
           horizontal: 15,
           vertical: 4,
         ),
         child: Padding(
-          padding: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
           child: ListTile(
             leading: CircleAvatar(
               child: Padding(
-                padding: EdgeInsets.all(5),
+                padding: const EdgeInsets.all(5),
                 // we need to use fitted box so that it dont overflow the money 
                 child: FittedBox(
                   child: Text('\$$price'),

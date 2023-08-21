@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 class ProductsGrid extends StatelessWidget {
     final bool showFavs;
 
-  ProductsGrid(this.showFavs);
+  const ProductsGrid(this.showFavs, {super.key});
   @override
   Widget build(BuildContext context) {
     final productsdata = Provider.of<Products>(context);
@@ -18,7 +18,7 @@ class ProductsGrid extends StatelessWidget {
      // we will use .value approach if a object is already there and we reuse its value where as in create we will prefer for new obj 
       itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
        value: products[i],
-        child: ProductItem(
+        child: const ProductItem(
           // loadedProducts[i].id,
           // loadedProducts[i].title,
           // loadedProducts[i].imageUrl,

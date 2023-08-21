@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/cart.dart';
-import 'package:shopapp/providers/products_provider.dart';
 import '../screens/product_detail_screen.dart';
 import '../providers/product.dart';
 
 class ProductItem extends StatelessWidget {
+  const ProductItem({super.key});
+
   // final String id;
   // final String title;
   // final String imageUrl;
@@ -43,7 +44,7 @@ class ProductItem extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           trailing: IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.shopping_cart,
             ),
             color: Theme.of(context).colorScheme.secondary,
@@ -54,8 +55,8 @@ class ProductItem extends StatelessWidget {
               // hiding snack bar will update the snakbar if we change it before 3 sec
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('Added Item to Cart'),
-                duration: Duration(seconds: 3),
+                content: const Text('Added Item to Cart'),
+                duration: const Duration(seconds: 3),
                 action: SnackBarAction(label: 'UNDO ', onPressed: (){
                   cart.removeSingleItem(product.id);
                 }),

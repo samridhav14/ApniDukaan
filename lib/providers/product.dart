@@ -18,6 +18,8 @@ class Product with ChangeNotifier{
       required this.imageUrl,
       this.isFavorite=false});
 
+  get items => null;
+
 
     void toggle(){
     isFavorite=!isFavorite;

@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import '../widgets/app_drawer.dart';
 import '../screens/cart_screen.dart';
 import '../widgets/product_grid.dart';
-import '../providers/products_provider.dart';
 import '../providers/cart.dart';
 import 'package:provider/provider.dart';
 import '/widgets/badge.dart'as bg;
-import '../providers/cart.dart';
 
 enum FilterOptions {
   Favorites,
@@ -14,6 +12,8 @@ enum FilterOptions {
 }
 
 class ProductOverviewScreen extends StatefulWidget {
+  const ProductOverviewScreen({super.key});
+
   @override
   State<ProductOverviewScreen> createState() => _ProductOverviewScreenState();
 }
@@ -36,34 +36,34 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
                 }
               });
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.more_vert,
             ),
             itemBuilder: (_) => [
-              PopupMenuItem(
-                child: Text('Only Favorites'),
+              const PopupMenuItem(
                 value: FilterOptions.Favorites,
+                child: Text('Only Favorites'),
               ),
-              PopupMenuItem(
-                child: Text('Show All'),
+              const PopupMenuItem(
                 value: FilterOptions.All,
+                child: Text('Show All'),
               ),
             ],
           ),
           Consumer<Cart>(builder:(_,cart,ch) => bg.Badge(
+                value: cart.itemCount.toString(),
                 child: ch!,
-                  value: cart.itemCount.toString(),
                   ),
             child: IconButton(
                 onPressed: () {
                   Navigator.of(context).pushNamed(CartScreen.routeName);
                 }, 
-                icon: Icon(Icons.shopping_cart)
+                icon: const Icon(Icons.shopping_cart)
                     ),
           ),
         ],
       ),
-      drawer: AppDrawer(
+      drawer: const AppDrawer(
         
       ),
       body: ProductsGrid(_showOnlyFavorites),

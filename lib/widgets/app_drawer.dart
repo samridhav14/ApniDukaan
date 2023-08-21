@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:shopapp/screens/users_products_screen.dart';
 import '../screens/orders_screen.dart';
 
 class AppDrawer extends StatelessWidget {
+  const AppDrawer({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -9,24 +12,32 @@ class AppDrawer extends StatelessWidget {
       child: Column(
          children: <Widget>[
           AppBar(
-            title: Text("Options"),
+            title: const Text("Options"),
             // it will not add a back button
             automaticallyImplyLeading: false,
           ),
-          Divider(),
+          const Divider(),
          ListTile(
-          leading: Icon(Icons.shop),
-          title: Text('Shop'),
+          leading: const Icon(Icons.shop),
+          title: const Text('Shop'),
           onTap: (){
             Navigator.of(context).pushReplacementNamed('/');
           },
          ),
-          Divider(),
+          const Divider(),
          ListTile(
-          leading: Icon(Icons.payment),
-          title: Text('Orders'),
+          leading: const Icon(Icons.payment),
+          title: const Text('Orders'),
           onTap: (){
             Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName);
+          },
+         ),
+          const Divider(),
+         ListTile(
+          leading: const Icon(Icons.edit),
+          title: const Text('ManageProducts'),
+          onTap: (){
+            Navigator.of(context).pushReplacementNamed(UserProductsScreen.routeName);
           },
          )
          ],
