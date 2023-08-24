@@ -74,6 +74,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       body: Padding(
         padding: const EdgeInsets.all(15),
         child: Form(
+          
             key: _form,
             child: ListView(
               children: <Widget>[
@@ -96,6 +97,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       isFavorite:false, 
                     );
                   },
+                  validator: ,
                 ),
                 TextFormField(
                   decoration: InputDecoration(
