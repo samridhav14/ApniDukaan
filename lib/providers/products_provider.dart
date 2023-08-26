@@ -88,6 +88,10 @@ class Products with ChangeNotifier {
     editedProduct.imageUrl=product.imageUrl;
     notifyListeners();
   }
+  void deleteProduct(String id){
+  _items.removeWhere((prod)=>prod.id==id);
+  notifyListeners();
+}
 }
 
 

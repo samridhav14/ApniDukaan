@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopapp/screens/users_products_screen.dart';
 
 import '../providers/product.dart';
 import '../providers/products_provider.dart';
@@ -92,11 +93,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
-  void _saveForm() {
+  bool _saveForm() {
     final isValid = _form.currentState!.validate();
     // this means form is not valid
     if (!isValid) {
-      return;
+      return false;
     }
     _form.currentState!.save();
     // print(_editedProduct.title);
@@ -106,9 +107,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
     // to add product in the item list
     if (_editedProduct.id != null) {
       Provider.of<Products>(context, listen: false).editProduct(_editedProduct);
+   
     } else {
       Provider.of<Products>(context, listen: false).addProduct(_editedProduct);
+ 
     }
+           return true;
   }
 
   @override
@@ -119,7 +123,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.save),
-            onPressed: _saveForm,
+            onPressed:(){
+              bool a=_saveForm();
+              if(a){
+                Navigator.of(context).pushReplacementNamed(UserProductsScreen.routeName);
+              }
+            },
           ),
         ],
       ),
@@ -253,7 +262,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         focusNode: _imageUrlFocusNode,
                         // we cant directly give save form becasuse we need to use the string we get on submit
                         onFieldSubmitted: (_) {
-                          _saveForm;
+                            bool a=_saveForm();
+              if(a){
+                Navigator.of(context).pushReplacementNamed(UserProductsScreen.routeName);
+              }
                         },
                         initialValue: _initValues['imageurl'],
 
