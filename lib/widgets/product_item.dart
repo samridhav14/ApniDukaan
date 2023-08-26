@@ -49,7 +49,7 @@ class ProductItem extends StatelessWidget {
             ),
             color: Theme.of(context).colorScheme.secondary,
             onPressed: () {
-              cart.addItem(product.id, product.price, product.title);
+              cart.addItem(product.id!, product.price, product.title);
               // thow somw popup it provides a connection to nearest scaffold widget
               // its a kind of popup 
               // hiding snack bar will update the snakbar if we change it before 3 sec
@@ -58,7 +58,7 @@ class ProductItem extends StatelessWidget {
                 content: const Text('Added Item to Cart'),
                 duration: const Duration(seconds: 3),
                 action: SnackBarAction(label: 'UNDO ', onPressed: (){
-                  cart.removeSingleItem(product.id);
+                  cart.removeSingleItem(product.id!);
                 }),
               ));
             },

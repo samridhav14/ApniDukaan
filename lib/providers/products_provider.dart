@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'product.dart';
+
 class Products with ChangeNotifier {
   final List<Product> _items = [
     Product(
@@ -35,18 +36,19 @@ class Products with ChangeNotifier {
           'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
     ),
   ];
-   // here we are using getter so that our item file which is private its copy cn be accessed by somewhere else
- 
+  // here we are using getter so that our item file which is private its copy cn be accessed by somewhere else
+
   List<Product> get items {
     // if (_showFavoritesOnly) {
     //   return _items.where((prodItem) => prodItem.isFavorite).toList();
     // }
     return [..._items];
   }
-  
+
   List<Product> get favoriteItems {
     return _items.where((prodItem) => prodItem.isFavorite).toList();
   }
+
 // to return products with specific id we define it here so that our code looks clean
   Product findById(String id) {
     return _items.firstWhere((prod) => prod.id == id);
@@ -62,9 +64,29 @@ class Products with ChangeNotifier {
   //   notifyListeners();
   // }
   // we are adding data by this specific member func because we need to notify all the listners about the change
-  void addProduct(){
-    //_items.add(value);
-   notifyListeners();
+  void addProduct(Product product) {
+    final newProduct = Product(
+        id: DateTime.now().toString(),
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        imageUrl: product.imageUrl);
+    _items.add(newProduct);
+    // if we want to add it a specific position
+    // _items.insert(intdex,newproduct);
+    notifyListeners();
+  }
+  void editProduct(Product product){
+  late Product editedProduct;
+    for(int i=0;i<_items.length;i++){
+      if(_items[i].id==product.id){
+        editedProduct=_items[i];
+      }
+    }
+    editedProduct.title=product.title;
+    editedProduct.description=product.description;
+    editedProduct.imageUrl=product.imageUrl;
+    notifyListeners();
   }
 }
 

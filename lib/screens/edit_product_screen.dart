@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import '../providers/product.dart';
+import '../providers/products_provider.dart';
 
 class EditProductScreen extends StatefulWidget {
-  const EditProductScreen({super.key});
   static const routeName = '/edit-product';
+
   @override
-  State<EditProductScreen> createState() => _EditProductScreenState();
+  _EditProductScreenState createState() => _EditProductScreenState();
 }
 
 class _EditProductScreenState extends State<EditProductScreen> {
@@ -20,12 +23,20 @@ class _EditProductScreenState extends State<EditProductScreen> {
   final _form = GlobalKey<FormState>();
   // here i have removed key because we dont have a system as of now to give id as of now
   var _editedProduct = Product(
-    id: '',
+    id: null,
     title: '',
     price: 0,
     description: '',
     imageUrl: '',
   );
+
+  var _initValues = {
+    'title': '',
+    'description': '',
+    'price': '',
+    'imageUrl': '',
+  };
+  var _isInit = true;
   @override
   // to update ui as we loose focus from it
   void initState() {
@@ -33,15 +44,27 @@ class _EditProductScreenState extends State<EditProductScreen> {
     super.initState();
   }
 
-  // if we loose focus and link is there we will update
-  void _updateImageUrl() {
-    
-    if (!_imageUrlFocusNode.hasFocus) {
-            if ((!_imageUrlController.text.startsWith('http') && !_imageUrlController.text.startsWith('https')) || (!_imageUrlController.text.endsWith('.png') && !_imageUrlController.text.endsWith('.jpeg') && !_imageUrlController.text.endsWith('jpg'))) {
-                   return;     
-                          }
-      setState(() {});
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      var tempproductId = ModalRoute.of(context)!.settings.arguments;
+      if (tempproductId != null) {
+        final productId = tempproductId.toString();
+        print(productId);
+        _editedProduct =
+            Provider.of<Products>(context, listen: false).findById(productId);
+        _initValues = {
+          'title': _editedProduct.title,
+          'description': _editedProduct.description,
+          'price': _editedProduct.price.toString(),
+          // 'imageUrl': _editedProduct.imageUrl,
+          'imageUrl': '',
+        };
+        _imageUrlController.text = _editedProduct.imageUrl;
+      }
     }
+    _isInit = false;
+    super.didChangeDependencies();
   }
 
   @override
@@ -55,17 +78,37 @@ class _EditProductScreenState extends State<EditProductScreen> {
     _imageUrlFocusNode.dispose();
   }
 
+  // if we loose focus and link is there we will update
+  void _updateImageUrl() {
+    if (!_imageUrlFocusNode.hasFocus) {
+      if ((!_imageUrlController.text.startsWith('http') &&
+              !_imageUrlController.text.startsWith('https')) ||
+          (!_imageUrlController.text.endsWith('.png') &&
+              !_imageUrlController.text.endsWith('.jpeg') &&
+              !_imageUrlController.text.endsWith('jpg'))) {
+        return;
+      }
+      setState(() {});
+    }
+  }
+
   void _saveForm() {
     final isValid = _form.currentState!.validate();
     // this means form is not valid
-    if (isValid) {
+    if (!isValid) {
       return;
     }
     _form.currentState!.save();
-    print(_editedProduct.title);
-    print(_editedProduct.description);
-    print(_editedProduct.price);
-    print(_editedProduct.imageUrl);
+    // print(_editedProduct.title);
+    // print(_editedProduct.description);
+    // print(_editedProduct.price);
+    // print(_editedProduct.imageUrl);
+    // to add product in the item list
+    if (_editedProduct.id != null) {
+      Provider.of<Products>(context, listen: false).editProduct(_editedProduct);
+    } else {
+      Provider.of<Products>(context, listen: false).addProduct(_editedProduct);
+    }
   }
 
   @override
@@ -91,6 +134,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     labelText: 'Title',
                   ),
                   textInputAction: TextInputAction.next,
+                  initialValue: _initValues['title'],
                   // this will help us to navigate to next or focused input feild
                   onFieldSubmitted: (_) {
                     FocusScope.of(context).requestFocus(_priceFocusNode);
@@ -123,6 +167,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   onFieldSubmitted: (_) {
                     FocusScope.of(context).requestFocus(_descriptionFocusNode);
                   },
+                  initialValue: _initValues['price'],
                   onSaved: (newValue) {
                     _editedProduct = Product(
                       title: _editedProduct.title,
@@ -164,6 +209,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       isFavorite: false,
                     );
                   },
+                  initialValue: _initValues['description'],
                   validator: (value) {
                     if (value!.isEmpty) {
                       return "Please provide a description";
@@ -171,9 +217,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     if (value.length < 10) {
                       return "Please provide a longer description";
                     }
-                    if (double.parse(value) <= 0) {
-                      return "Please provide a valid price greater then 0";
-                    }
+
                     return null;
                   },
                 ),
@@ -211,6 +255,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         onFieldSubmitted: (_) {
                           _saveForm;
                         },
+                        initialValue: _initValues['imageurl'],
+
                         onSaved: (newValue) {
                           _editedProduct = Product(
                             title: _editedProduct.title,
@@ -225,10 +271,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           if (value!.isEmpty) {
                             return "Please provide an image url";
                           }
-                          if (!value.startsWith('http') && !value.startsWith('https')) {
+                          if (!value.startsWith('http') &&
+                              !value.startsWith('https')) {
                             return "Please provide a valid url";
                           }
-                          if (!value.endsWith('.png') && !value.endsWith('.jpeg') && !value.endsWith('jpg')) {
+                          if (!value.endsWith('.png') &&
+                              !value.endsWith('.jpeg') &&
+                              !value.endsWith('jpg')) {
                             return "Please provide a valid url";
                           }
                           return null;
