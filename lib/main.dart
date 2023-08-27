@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        // different notifier for diff data
+        //different notifier for diff data
         ChangeNotifierProvider(
           create: (context) => Products(),
         ),
