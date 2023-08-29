@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
 import 'product.dart';
+import 'package:http/http.dart' as http;
 
 class Products with ChangeNotifier {
   final List<Product> _items = [
@@ -64,41 +66,51 @@ class Products with ChangeNotifier {
   //   notifyListeners();
   // }
   // we are adding data by this specific member func because we need to notify all the listners about the change
-  void addProduct(Product product) {
-    final newProduct = Product(
-        id: DateTime.now().toString(),
-        title: product.title,
-        description: product.description,
-        price: product.price,
-        imageUrl: product.imageUrl);
-    _items.add(newProduct);
-    // if we want to add it a specific position
-    // _items.insert(intdex,newproduct);
-    notifyListeners();
+ Future<void> addProduct(Product product) {
+    const url =
+        'https://shop-app-e47df-default-rtdb.asia-southeast1.firebasedatabase.app/products.json';
+   return http
+        .post(Uri.parse(url),
+            body: json.encode({
+              'title': product.title,
+              'price': product.price,
+              'description': product.description,
+              'isFavorite': product.isFavorite,
+            })) //then will execute when sending request is completed and we cad show changes to ui and local storage
+        .then((value) {
+      final newProduct = Product(
+          // value is the response sent by fire base it is unique we can use it as id
+          id: jsonDecode(value.body)['name'],
+          title: product.title,
+          description: product.description,
+          price: product.price,
+          imageUrl: product.imageUrl);
+      _items.add(newProduct);
+      // if we want to add it a specific position
+      // _items.insert(intdex,newproduct);
+      notifyListeners();
+    
+    });
+    
   }
-  void editProduct(Product product){
-  late Product editedProduct;
-    for(int i=0;i<_items.length;i++){
-      if(_items[i].id==product.id){
-        editedProduct=_items[i];
+
+  void editProduct(Product product) {
+    late Product editedProduct;
+    for (int i = 0; i < _items.length; i++) {
+      if (_items[i].id == product.id) {
+        editedProduct = _items[i];
       }
     }
-    editedProduct.title=product.title;
-    editedProduct.description=product.description;
-    editedProduct.imageUrl=product.imageUrl;
+    editedProduct.title = product.title;
+    editedProduct.description = product.description;
+    editedProduct.imageUrl = product.imageUrl;
     notifyListeners();
   }
-  void deleteProduct(String id){
-  _items.removeWhere((prod)=>prod.id==id);
-  notifyListeners();
+
+  void deleteProduct(String id) {
+    _items.removeWhere((prod) => prod.id == id);
+    notifyListeners();
+  }
 }
-}
 
-
-
-
-
-
-  // var _showFavoritesOnly = false;
-
-
+// var _showFavoritesOnly = false;

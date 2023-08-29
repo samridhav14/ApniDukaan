@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shopapp/screens/users_products_screen.dart';
 
 import '../providers/product.dart';
 import '../providers/products_provider.dart';
@@ -38,6 +37,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     'imageUrl': '',
   };
   var _isInit = true;
+  var _isLoading=false;
   @override
   // to update ui as we loose focus from it
   void initState() {
@@ -93,11 +93,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
-  bool _saveForm() {
+  _saveForm() {
     final isValid = _form.currentState!.validate();
     // this means form is not valid
     if (!isValid) {
-      return false;
+      return;
     }
     _form.currentState!.save();
     // print(_editedProduct.title);
@@ -105,14 +105,22 @@ class _EditProductScreenState extends State<EditProductScreen> {
     // print(_editedProduct.price);
     // print(_editedProduct.imageUrl);
     // to add product in the item list
+    setState(() {
+      _isLoading=true;
+    });
     if (_editedProduct.id != null) {
       Provider.of<Products>(context, listen: false).editProduct(_editedProduct);
-   
-    } else {
-      Provider.of<Products>(context, listen: false).addProduct(_editedProduct);
- 
     }
-           return true;
+    //we are returning a future so that we can show show loading until it gets uploaded 
+    else {
+      Provider.of<Products>(context, listen: false).addProduct(_editedProduct).then((_){
+            setState(() {
+      _isLoading=false;
+    });
+               Navigator.of(context).pop();
+      });
+    }
+       
   }
 
   @override
@@ -123,16 +131,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.save),
-            onPressed:(){
-              bool a=_saveForm();
-              if(a){
-                Navigator.of(context).pushReplacementNamed(UserProductsScreen.routeName);
-              }
+            onPressed: () {
+              _saveForm();
             },
           ),
         ],
       ),
-      body: Padding(
+      body: _isLoading==true ? Center(
+        child: CircularProgressIndicator(),
+      ) : Padding(
         padding: const EdgeInsets.all(15),
         child: Form(
             key: _form,
@@ -262,10 +269,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         focusNode: _imageUrlFocusNode,
                         // we cant directly give save form becasuse we need to use the string we get on submit
                         onFieldSubmitted: (_) {
-                            bool a=_saveForm();
-              if(a){
-                Navigator.of(context).pushReplacementNamed(UserProductsScreen.routeName);
-              }
+                          _saveForm();
                         },
                         initialValue: _initValues['imageurl'],
 
