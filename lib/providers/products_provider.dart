@@ -90,6 +90,9 @@ class Products with ChangeNotifier {
       // _items.insert(intdex,newproduct);
       notifyListeners();
     
+    }).catchError((onError){
+          print(onError); 
+         throw onError;
     });
     
   }
