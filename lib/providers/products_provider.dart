@@ -66,34 +66,59 @@ class Products with ChangeNotifier {
   //   notifyListeners();
   // }
   // we are adding data by this specific member func because we need to notify all the listners about the change
- Future<void> addProduct(Product product) {
+ Future<void> addProduct(Product product) async {
     const url =
         'https://shop-app-e47df-default-rtdb.asia-southeast1.firebasedatabase.app/products.json';
-   return http
-        .post(Uri.parse(url),
-            body: json.encode({
-              'title': product.title,
-              'price': product.price,
-              'description': product.description,
-              'isFavorite': product.isFavorite,
-            })) //then will execute when sending request is completed and we cad show changes to ui and local storage
-        .then((value) {
+         try {
+      final response = await http.post(
+        Uri.parse(url),
+        body: json.encode({
+          'title': product.title,
+          'description': product.description,
+          'imageUrl': product.imageUrl,
+          'price': product.price,
+          'isFavorite': product.isFavorite,
+        }),
+      );
       final newProduct = Product(
-          // value is the response sent by fire base it is unique we can use it as id
-          id: jsonDecode(value.body)['name'],
-          title: product.title,
-          description: product.description,
-          price: product.price,
-          imageUrl: product.imageUrl);
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        imageUrl: product.imageUrl,
+        id: json.decode(response.body)['name'],
+      );
       _items.add(newProduct);
-      // if we want to add it a specific position
-      // _items.insert(intdex,newproduct);
+      // _items.insert(0, newProduct); // at the start of the list
       notifyListeners();
+    } catch (error) {
+      print(error);
+      throw error;
+    }
+    // http
+    //     .post(Uri.parse(url),
+    //         body: json.encode({
+    //           'title': product.title,
+    //           'price': product.price,
+    //           'description': product.description,
+    //           'isFavorite': product.isFavorite,
+    //         })) //then will execute when sending request is completed and we cad show changes to ui and local storage
+    //     .then((value) {
+    //   final newProduct = Product(
+    //       // value is the response sent by fire base it is unique we can use it as id
+    //       id: jsonDecode(value.body)['name'],
+    //       title: product.title,
+    //       description: product.description,
+    //       price: product.price,
+    //       imageUrl: product.imageUrl);
+    //   _items.add(newProduct);
+    //   // if we want to add it a specific position
+    //   // _items.insert(intdex,newproduct);
+    //   notifyListeners();
     
-    }).catchError((onError){
-          print(onError); 
-         throw onError;
-    });
+    // }).catchError((onError){
+    //       print(onError); 
+    //      throw onError;
+    // });
     
   }
 

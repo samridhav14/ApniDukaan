@@ -93,47 +93,91 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
-  _saveForm() {
+  // _saveForm() {
+  //   final isValid = _form.currentState!.validate();
+  //   // this means form is not valid
+  //   if (!isValid) {
+  //     return;
+  //   }
+  //   _form.currentState!.save();
+  //   // print(_editedProduct.title);
+  //   // print(_editedProduct.description);
+  //   // print(_editedProduct.price);
+  //   // print(_editedProduct.imageUrl);
+  //   // to add product in the item list
+  //   setState(() {
+  //     _isLoading = true;
+  //   });
+  //   if (_editedProduct.id != null) {
+  //     Provider.of<Products>(context, listen: false).editProduct(_editedProduct);
+  //     Navigator.of(context).pop();
+  //   }
+  //   //we are returning a future so that we can show show loading until it gets uploaded
+  //   else {
+  //     Provider.of<Products>(context, listen: false)
+  //         .addProduct(_editedProduct)
+  //         .catchError((onError) {
+  //      return showDialog(
+  //           context: context,
+  //           builder: (ctx) =>  AlertDialog(
+  //                 title:const Text('An error occurred'),
+  //                 content: const Text('Something Went Wrong'),
+  //                 actions: <Widget>[
+  //                   TextButton(child: const Text('Okay'),onPressed: (){
+  //                     Navigator.of(context).pop();
+  //                   },)
+  //                 ],
+  //               ));
+  //     }).then((_) {
+  //       setState(() {
+  //         _isLoading = false;
+  //       });
+  //       Navigator.of(context).pop();
+  //     });
+  //   }
+  
+    Future<void> _saveForm() async {
     final isValid = _form.currentState!.validate();
-    // this means form is not valid
     if (!isValid) {
       return;
     }
     _form.currentState!.save();
-    // print(_editedProduct.title);
-    // print(_editedProduct.description);
-    // print(_editedProduct.price);
-    // print(_editedProduct.imageUrl);
-    // to add product in the item list
     setState(() {
       _isLoading = true;
     });
     if (_editedProduct.id != null) {
-      Provider.of<Products>(context, listen: false).editProduct(_editedProduct);
-      Navigator.of(context).pop();
-    }
-    //we are returning a future so that we can show show loading until it gets uploaded
-    else {
       Provider.of<Products>(context, listen: false)
-          .addProduct(_editedProduct)
-          .catchError((onError) {
-       return showDialog(
-            context: context,
-            builder: (ctx) =>  AlertDialog(
-                  title:const Text('An error occurred'),
-                  content: const Text('Something Went Wrong'),
-                  actions: <Widget>[
-                    TextButton(child: Text('Okay'),onPressed: (){
-                      Navigator.of(context).pop();
-                    },)
-                  ],
-                ));
-      }).then((_) {
+          .editProduct(_editedProduct);
+      setState(() {
+        _isLoading = false;
+      });
+      Navigator.of(context).pop();
+    } else {
+      try {
+        await Provider.of<Products>(context, listen: false)
+            .addProduct(_editedProduct);
+      } catch (error) {
+        await showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+                title: Text('An error occurred!'),
+                content: Text('Something went wrong.'),
+                actions: <Widget>[
+                  TextButton(
+                    child: Text('Okay'),
+                    onPressed: () {
+                      Navigator.of(ctx).pop();
+                    },
+                  )
+                ],
+              ),
+        );
+      } finally {
         setState(() {
           _isLoading = false;
         });
         Navigator.of(context).pop();
-      });;
+      }
     }
   }
 
