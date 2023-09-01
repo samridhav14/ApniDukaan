@@ -135,8 +135,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
   //       Navigator.of(context).pop();
   //     });
   //   }
-  
-    Future<void> _saveForm() async {
+
+  Future<void> _saveForm() async {
     final isValid = _form.currentState!.validate();
     if (!isValid) {
       return;
@@ -146,8 +146,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       _isLoading = true;
     });
     if (_editedProduct.id != null) {
-      Provider.of<Products>(context, listen: false)
-          .editProduct(_editedProduct);
+      Provider.of<Products>(context, listen: false).editProduct(_editedProduct);
       setState(() {
         _isLoading = false;
       });
@@ -160,17 +159,17 @@ class _EditProductScreenState extends State<EditProductScreen> {
         await showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
-                title: Text('An error occurred!'),
-                content: Text('Something went wrong.'),
-                actions: <Widget>[
-                  TextButton(
-                    child: Text('Okay'),
-                    onPressed: () {
-                      Navigator.of(ctx).pop();
-                    },
-                  )
-                ],
-              ),
+            title: const Text('An error occurred!'),
+            content: const Text('Something went wrong.'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Okay'),
+                onPressed: () {
+                  Navigator.of(ctx).pop();
+                },
+              )
+            ],
+          ),
         );
       } finally {
         setState(() {
@@ -188,7 +187,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
         title: const Text('Edit Product'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.save),
+            icon: const Icon(Icons.save),
             onPressed: () {
               _saveForm();
             },
@@ -196,8 +195,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
         ],
       ),
       body: _isLoading == true
-          ? Center(
-              child: CircularProgressIndicator(),
+          ? const Center(
+              child:  CircularProgressIndicator(),
             )
           : Padding(
               padding: const EdgeInsets.all(15),
@@ -206,7 +205,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   child: ListView(
                     children: <Widget>[
                       TextFormField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Title',
                         ),
                         textInputAction: TextInputAction.next,
@@ -234,7 +233,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         },
                       ),
                       TextFormField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Price',
                         ),
                         keyboardType: TextInputType.number,
@@ -269,7 +268,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         },
                       ),
                       TextFormField(
-                        decoration: InputDecoration(
+                        decoration:const InputDecoration(
                           labelText: 'Description',
                         ),
                         maxLines: 3,
@@ -314,7 +313,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                     Border.all(width: 1, color: Colors.grey),
                               ),
                               child: _imageUrlController.text.isEmpty
-                                  ? Text('Enter a Url')
+                                  ? const Text('Enter a Url')
                                   : FittedBox(
                                       child: Image.network(
                                           _imageUrlController.text),
