@@ -9,6 +9,10 @@ import '../widgets/user_product_item.dart';
 class UserProductsScreen extends StatelessWidget {
   static const routeName = '/user-products';
 
+    Future<void> _refreshProducts(BuildContext context) async {
+    await Provider.of<Products>(context).fetchAndSetProducts();
+  }
+
   @override
   Widget build(BuildContext context) {
     final productsData = Provider.of<Products>(context);
@@ -25,22 +29,25 @@ class UserProductsScreen extends StatelessWidget {
         ],
       ),
       drawer:const AppDrawer(),
-      body: Padding(
-        padding: const EdgeInsets.all(8),
-        child: ListView.builder(
-          // theoritically we can have infinite product
-          itemCount: productsData.items.length,
-          itemBuilder: (_, i) => Column(
-                children: [
-                  // to edit or delete already existing item
-                  UserProductItem(
-                    productsData.items[i].title,
-                    productsData.items[i].imageUrl,
-                    productsData.items[i].id!,
-                  ),
-                  const Divider(),
-                ],
-              ),
+      body: RefreshIndicator(
+        onRefresh: () => _refreshProducts(context),
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: ListView.builder(
+            // theoritically we can have infinite product
+            itemCount: productsData.items.length,
+            itemBuilder: (_, i) => Column(
+                  children: [
+                    // to edit or delete already existing item
+                    UserProductItem(
+                      productsData.items[i].title,
+                      productsData.items[i].imageUrl,
+                      productsData.items[i].id!,
+                    ),
+                    const Divider(),
+                  ],
+                ),
+          ),
         ),
       ),
     );

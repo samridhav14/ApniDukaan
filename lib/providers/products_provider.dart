@@ -139,6 +139,7 @@ Future<void> fetchAndSetProducts() async{
         ));
       });
       _items = loadedProducts;
+      print(_items.length);
       notifyListeners();
         }
         catch(error){
@@ -146,21 +147,38 @@ Future<void> fetchAndSetProducts() async{
         }
 }
 
-  void editProduct(Product product) {
-    late Product editedProduct;
-    for (int i = 0; i < _items.length; i++) {
-      if (_items[i].id == product.id) {
-        editedProduct = _items[i];
-      }
+ Future<void> editProduct(String id, Product newProduct) async {
+     final prodIndex = _items.indexWhere((prod) => prod.id == id);
+    if (prodIndex >= 0) {
+      final url = 'https://flutter-update.firebaseio.com/products/$id.json';
+      await http.patch(Uri.parse(url),
+          body: json.encode({
+            'title': newProduct.title,
+            'description': newProduct.description,
+            'imageUrl': newProduct.imageUrl,
+            'price': newProduct.price
+          }));
+      _items[prodIndex] = newProduct;
+      notifyListeners();
+    } else {
+      print('...');
     }
-    editedProduct.title = product.title;
-    editedProduct.description = product.description;
-    editedProduct.imageUrl = product.imageUrl;
-    notifyListeners();
   }
 
   void deleteProduct(String id) {
-    _items.removeWhere((prod) => prod.id == id);
+          final url = 'https://flutter-update.firebaseio.com/products/$id.json';
+      final existingProductIndex= _items.indexWhere((element) => element.id==id);
+      Product? existingProduct=_items[existingProductIndex];
+    _items.removeAt(existingProductIndex);
+    // if we fail add back;
+    http.delete(Uri.parse(url)).then((value){
+      if(value.statusCode>=400){
+        //
+      }
+      existingProduct=null;
+    }).catchError((_){
+      _items.insert(existingProductIndex, existingProduct!);
+    });
     notifyListeners();
   }
 }
